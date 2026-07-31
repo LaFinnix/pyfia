@@ -79,11 +79,26 @@ NZ_SPECIES_EXTRAS: tuple[SpeciesExtra, ...] = (
     # ---- Planted exotics ----
     SpeciesExtra(
         name="radiata-pine",
-        spcd=131,  # FIA SPCD 131 = Pinus taeda (closest to P. radiata)
+        # FIA SPCD 131 = Pinus taeda (loblolly). Used as the closest
+        # FIA coefficient match for Pinus radiata because pyFIA's NSVB
+        # coefficient CSVs are FIA-specific and have no Pinus radiata
+        # entry. Expect ~10-15% bias on per-tree biomass vs. Pinus
+        # radiata-specific volume equations (Reason et al., 2012;
+        # Forest & Wood Products Australia, 2019).
+        spcd=131,
         wdsg=0.41,
         family="Pinaceae",
         common_names=("pine", "pin-radiata", "pinus-radiata"),
-        citation="Wood-Density-Database v2.0 (Global) + IAWA: radiata pine 0.41 g/cm³",
+        # WDSG is the actual Pinus radiata value (IAWA + Wood-Density-
+        # Database v2.0): 0.41 g/cm³ green-volume dry weight. Independent
+        # of the SPCD proxy above, so downstream Jenkins-fallback
+        # estimates use the correct radiata-wood density.
+        citation=(
+            "SPCD 131 = Pinus taeda (loblolly pine) — used as the closest "
+            "FIA match for Pinus radiata; expect ~10-15% per-tree biomass "
+            "bias vs. Pinus radiata volume equations. WDSG=0.41 g/cm³ is "
+            "the actual Pinus radiata wood density (IAWA + WDDB v2.0)."
+        ),
     ),
     SpeciesExtra(
         name="douglas-fir",

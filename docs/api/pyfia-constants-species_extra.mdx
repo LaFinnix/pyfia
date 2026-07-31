@@ -25,7 +25,7 @@ API or coefficient tables.
 
 ## Functions
 
-### `by_name` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L171" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### `by_name` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L234" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 ```python
@@ -39,7 +39,7 @@ Find a species entry by canonical name (e.g., ``"radiata-pine"``).
 - The matching `SpeciesExtra`, or `None` if the name is not in the table.
 
 
-### `by_alias` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L175" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### `by_alias` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L239" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 ```python
@@ -52,7 +52,7 @@ Find a species entry by an alias (e.g., ``"pine"``).
 Hyphens and underscores are both accepted as word separators.
 
 
-### `lookup` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L183" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### `lookup` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L247" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 ```python
@@ -67,7 +67,7 @@ Convenience wrapper — tries `by_name` first, then `by_alias`.
 
 ## Classes
 
-### `SpeciesExtra` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L26" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### `SpeciesExtra` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L51" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 One row of an Aotearoa species table.
@@ -83,7 +83,7 @@ One row of an Aotearoa species table.
 
 ## Constants
 
-### `NZ_SPECIES_EXTRAS` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L59" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### `NZ_SPECIES_EXTRAS` <sup><a href="https://github.com/mihiarc/pyfia/blob/main/src/pyfia/constants/species_extra.py#L78" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A 16-entry table covering the bulk of NZ plantation forestry area
@@ -126,6 +126,17 @@ fallback_spcd = None   # Jenkins Model 5 will dispatch
 fallback_wdsg = 0.65  # mid-range hardwood default
 ```
 
+
+
+
+
+
+## See also
+
+- [`pyfia.constants.species_macros`](/api/pyfia-constants-species_macros)
+  — te reo Māori macron spellings that bridge into `species_extra`.
+
+## Coverage of NZ species
 
 ## About the contributor
 

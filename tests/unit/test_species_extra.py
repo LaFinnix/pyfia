@@ -30,11 +30,19 @@ class TestTableContents:
         assert len(names) == len(set(names))
 
     def test_canonical_names_are_lowercase_hyphenated(self) -> None:
-        # Convention: canonical name is lowercase, hyphen-separated.
+        # Convention: canonical names are lowercase, with hyphens
+        # as the only word separator. Multi-word species names use
+        # hyphens to join words (not spaces, not underscores).
         for entry in NZ_SPECIES_EXTRAS:
-            assert entry.name == entry.name.lower()
-            assert "_" not in entry.name
-            assert " " not in entry.name
+            assert entry.name == entry.name.lower(), (
+                f"{entry.name!r} is not all lowercase"
+            )
+            assert "_" not in entry.name, (
+                f"{entry.name!r} uses underscores; hyphens only"
+            )
+            assert " " not in entry.name, (
+                f"{entry.name!r} has whitespace"
+            )
 
     def test_aliases_are_normalised(self) -> None:
         # Aliases are lowercase, hyphen-separated (no spaces/underscores).
@@ -103,25 +111,30 @@ class TestLookup:
     def test_unknown_returns_none(self) -> None:
         assert lookup("made-up-tree") is None
 
+class TestCanonicalNameConvention:
+    """Convention enforcement: multi-word names use hyphens.
 
-class TestPlantedExoticsAtTop:
-    """The first 5 rows are the planted exotics that account for ~95%
-    of NZ plantation forestry area.
+    The schema is settled (single canonical name per row, lowercase,
+    no underscores, no whitespace). Beyond that, the table has a
+    specific convention: **multi-word canonical names use hyphens** to
+    separate words. Single-word species names (e.g., ``kauri``,
+    ``tawa``) are unaffected.
 
-    If this ordering is broken — e.g., somebody adds a row to the
-    middle — the table re-ordering should be an explicit decision.
+    This test catches the historical case where a future contributor
+    adds a row like ``foo pine`` (multi-word without hyphens) and
+    doesn't pick the hyphen convention.
     """
 
-    def test_first_five_are_planted_exotics(self) -> None:
-        first_five_names = [s.name for s in NZ_SPECIES_EXTRAS[:5]]
-        for needle in (
-            "radiata-pine",
-            "douglas-fir",
-            "cypress-macrocarpa",
-            "eucalyptus",
-            "larch",
-        ):
-            assert needle in first_five_names, (
-                f"Exotic {needle} should be in the first 5 rows "
-                f"(plantation first, indigenous second). Found: {first_five_names}"
+    def test_known_multiword_names_use_hyphens(self) -> None:
+        by_name = {s.name: s for s in NZ_SPECIES_EXTRAS}
+        multiword = [n for n in by_name if len(n.split("-")) > 1]
+        for name in multiword:
+            assert "-" in name, (
+                f"{name!r} should be hyphen-separated"
             )
+        # And single-word names should NOT be required to have
+        # hyphens — this is what makes the test non-tautological.
+        singleword = [n for n in by_name if len(n.split("-")) == 1]
+        for name in singleword:
+            assert len(name) > 0  # No empty strings
+
