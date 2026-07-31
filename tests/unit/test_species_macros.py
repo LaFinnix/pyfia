@@ -6,6 +6,25 @@ import pytest
 
 from pyfia.constants.species_macros import MACRON_ALIASES, macron_to_canonical
 
+# Test cases: (macroned spelling, expected canonical, note).
+# Used by parametrize below. Single source of truth — adding a new
+# macron is a 1-line change here.
+_MACRON_TEST_CASES = [
+    ("rīmū", "rimu"),
+    ("kaurī", "kauri"),
+    ("tōtara", "totara"),
+    ("matāī", "matai"),
+    ("mīro", "miro"),
+    ("tāwa", "tawa"),
+    ("mangeāo", "mangeao"),
+    ("kahikātea", "kahikatea"),
+    ("tawhairauriki", "beech-red"),
+    ("tawhairaunui", "beech-hard"),
+    ("rātā", "radiata-pine"),  # te reo loanword
+    ("rāta", "radiata-pine"),  # alternate spelling
+    ("tawhai", "beech-hard"),  # generic form
+]
+
 
 class TestMacronAliases:
     """The aliases table covers the canonical-indigenous species."""
@@ -13,46 +32,34 @@ class TestMacronAliases:
     def test_table_is_not_empty(self) -> None:
         assert len(MACRON_ALIASES) > 0
 
-    def test_known_macrons_resolve(self) -> None:
-        # rīmū → rimu
-        result = macron_to_canonical("rīmū")
+    @pytest.mark.parametrize("macroned,expected_canonical", _MACRON_TEST_CASES)
+    def test_macron_resolves_to_canonical(self, macroned: str, expected_canonical: str) -> None:
+        result = macron_to_canonical(macroned)
+        assert result is not None, f"no entry for {macroned!r}"
+        canonical, _ = result
+        assert canonical == expected_canonical, (
+            f"expected {macroned!r} → {expected_canonical!r}, got {canonical!r}"
+        )
+
+    def test_radiata_pine_loanword(self) -> None:
+        # The "rātā" entry is documented as a Māori loanword. Make
+        # sure the note preserves that provenance.
+        result = macron_to_canonical("rātā")
         assert result is not None
         canonical, note = result
-        assert canonical == "rimu"
-
-    def test_kauri_macrons(self) -> None:
-        result = macron_to_canonical("kaurī")
-        assert result is not None
-        assert result[0] == "kauri"
-
-    def test_totara_macrons(self) -> None:
-        result = macron_to_canonical("tōtara")
-        assert result is not None
-        assert result[0] == "totara"
-
-    def test_matai_macrons(self) -> None:
-        result = macron_to_canonical("matāī")
-        assert result is not None
-        assert result[0] == "matai"
-
-    def test_miro_macrons(self) -> None:
-        result = macron_to_canonical("mīro")
-        assert result is not None
-        assert result[0] == "miro"
-
-    def test_tawa_macrons(self) -> None:
-        result = macron_to_canonical("tāwa")
-        assert result is not None
-        assert result[0] == "tawa"
-
-    def test_kano_no_macrons_also_resolves(self) -> None:
-        # Plain ASCII forms also resolve.
-        result = macron_to_canonical("rimu")
-        assert result is not None
-        assert result[0] == "rimu"
+        assert canonical == "radiata-pine"
+        assert "Māori" in note or "loanword" in note.lower()
 
     def test_unknown_returns_none(self) -> None:
         assert macron_to_canonical("nonexistent-tree") is None
+
+    def test_ascii_forms_no_longer_resolve(self) -> None:
+        # Regression: after we removed the ASCII duplicates (audit
+        # 2026-07-30), ASCII forms must NOT be in MACRON_ALIASES.
+        # ASCII is reachable via species_extra.lookup() instead.
+        assert macron_to_canonical("rimu") is None
+        assert macron_to_canonical("kauri") is None
+        assert macron_to_canonical("totara") is None
 
 
 class TestMacronPreservation:

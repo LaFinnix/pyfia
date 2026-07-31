@@ -9,20 +9,26 @@ Why this exists
 ---------------
 
 ``species_extra`` uses Latin / English canonical names (e.g.,
-``"rimu"``, ``"kauri"``) for cross-border compatibility. But NZ
+``"rimu"``, ``"kauri"``) for cross-border compatibility. NZ
 foresters, kaitiaki, and iwi data collectors spell the same trees
 with the proper te reo Māori macrons:
 
-    rimu   →   rīmū   (or    rimu   — both spellings are attested)
+    rimu   →   rīmū
     kauri  →   kaurī
-    matai  →   mataī
+    matai  →   matāī
     totara →   tōtara
     ... etc.
 
-These can be passed to the same lookup functions transparently:
+This module maps those macroned spellings to the canonical ASCII
+names. ASCII forms are *not* duplicated here — they resolve via
+``pyfia.constants.species_extra.lookup()`` directly:
 
-    >>> lookup("rīmū")  # works
-    >>> lookup("rimu")  # also works (canonical)
+    >>> from pyfia.constants.species_macros import macron_to_canonical
+    >>> from pyfia.constants.species_extra import lookup
+    >>>
+    >>> result = macron_to_canonical("rīmū")  # → ("rimu", "")
+    >>> canonical, _ = result
+    >>> entry = lookup(canonical)              # → SpeciesExtra(...)
 
 Pure-data, additive; no changes to ``species_extra`` or pyFIA itself.
 
@@ -68,15 +74,6 @@ MACRON_ALIASES: dict[str, tuple[str, str]] = {
     # Beech forms
     "tawhai": ("beech-hard", "Generic tawhai; beech-hard in absence of qualifier"),
 
-    # ---- Verified common-name vatiations (no macron). Kept as aliases for completeness. ----
-    "rimu": ("rimu", "ASCII — no macron"),
-    "kauri": ("kauri", "ASCII — no macron"),
-    "totara": ("totara", "ASCII — no macron"),
-    "matai": ("matai", "ASCII — no macron"),
-    "miro": ("miro", "ASCII — no macron"),
-    "tawa": ("tawa", "ASCII — no macron"),
-    "mangeao": ("mangeao", "ASCII — no macron"),
-    "kahikatea": ("kahikatea", "ASCII — no macron"),
 }
 
 
