@@ -20,11 +20,29 @@ from .columns import (
     StratColumns,
     TreeColumns,
 )
+from .species_extra import (
+    NZ_SPECIES_EXTRAS,
+    SpeciesExtra,
+)
+from .species_extra import (
+    by_alias as species_by_alias,
+)
+from .species_extra import (
+    by_name as species_by_name,
+)
+from .species_extra import (
+    lookup as species_lookup,
+)
 
 __all__ = [
-    "TreeColumns",
     "CondColumns",
-    "PlotColumns",
-    "StratColumns",
+    "NZ_SPECIES_EXTRAS",
     "OutputColumns",
+    "PlotColumns",
+    "SpeciesExtra",
+    "StratColumns",
+    "TreeColumns",
+    "species_by_alias",
+    "species_by_name",
+    "species_lookup",
 ]
