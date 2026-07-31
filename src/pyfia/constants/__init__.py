@@ -23,8 +23,14 @@ from .columns import (
 from .species_extra import (
     NZ_SPECIES_EXTRAS,
     SpeciesExtra,
+)
+from .species_extra import (
     by_alias as species_by_alias,
+)
+from .species_extra import (
     by_name as species_by_name,
+)
+from .species_extra import (
     lookup as species_lookup,
 )
 from .species_macros import (

@@ -82,6 +82,13 @@ class TestLookupByName:
     def test_unknown_species_returns_none(self) -> None:
         assert by_name("not-a-real-tree") is None
 
+    def test_underscore_input_normalised(self) -> None:
+        # Canonical names are stored with hyphens. Callers may pass
+        # underscores; by_name normalises them like by_alias does.
+        assert by_name("radiata_pine") is not None
+        assert by_name("beech_red") is not None
+        assert by_name("cypress_macrocarpa") is not None
+
 
 class TestLookupByAlias:
     """``by_alias`` handles common-name variants."""

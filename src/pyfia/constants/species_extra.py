@@ -232,8 +232,15 @@ for s in NZ_SPECIES_EXTRAS:
 
 
 def by_name(name: str) -> SpeciesExtra | None:
-    """Find a species entry by canonical name (e.g., ``"radiata-pine"``)."""
-    return _BY_NAME.get(name.lower())
+    """Find a species entry by canonical name (e.g., ``"radiata-pine"``).
+
+    Hyphens and underscores are both accepted as word separators,
+    matching ``by_alias`` so callers don't have to remember which form
+    they passed.
+    """
+    return _BY_NAME.get(
+        name.lower().replace(" ", "-").replace("_", "-")
+    )
 
 
 def by_alias(name: str) -> SpeciesExtra | None:

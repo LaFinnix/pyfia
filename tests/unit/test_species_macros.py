@@ -48,7 +48,10 @@ class TestMacronAliases:
         assert result is not None
         canonical, note = result
         assert canonical == "radiata-pine"
-        assert "Māori" in note or "loanword" in note.lower()
+        # The note must preserve both the loanword status AND the
+        # te reo Māori provenance.
+        assert "loanword" in note.lower()
+        assert "Māori" in note
 
     def test_unknown_returns_none(self) -> None:
         assert macron_to_canonical("nonexistent-tree") is None
